@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2025-06-04 02:33:09
+-- 產生時間： 2025-06-05 03:40:42
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -32,20 +32,22 @@ CREATE TABLE `items` (
   `name` varchar(16) NOT NULL,
   `cost` int(10) NOT NULL,
   `stock` int(10) NOT NULL,
-  `price` int(10) UNSIGNED NOT NULL
+  `price` int(10) UNSIGNED NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `category` varchar(50) NOT NULL DEFAULT '未分類'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 傾印資料表的資料 `items`
 --
 
-INSERT INTO `items` (`id`, `name`, `cost`, `stock`, `price`) VALUES
-(1, '蛋餅', 5, 50, 15),
-(2, '豆漿', 8, 100, 15),
-(3, '火腿三明治', 10, 100, 25),
-(4, '雞肉漢堡', 20, 50, 30),
-(5, '蘿葡糕', 12, 100, 35),
-(6, '雞肉可頌', 25, 50, 55);
+INSERT INTO `items` (`id`, `name`, `cost`, `stock`, `price`, `img`, `category`) VALUES
+(1, '蛋餅', 20, 50, 20, '683f9fd15fae3.png', '其他'),
+(2, '豆漿', 8, 100, 15, '683fa099b5bb2.jpg', '飲品'),
+(3, '三明治', 10, 100, 25, '683fa062991d0.png', '吐司'),
+(4, '漢堡', 20, 50, 30, '683fa21e7b727.png', '漢堡'),
+(5, '蘿葡糕', 12, 100, 35, '683fa004a3e62.png', '其他'),
+(7, '大冰奶', 5, 100, 20, '683f9b6c1da36.png', '飲品');
 
 -- --------------------------------------------------------
 
@@ -110,7 +112,7 @@ ALTER TABLE `sales`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `sales`
