@@ -8,8 +8,7 @@
 <body>
     <h1>編輯品項</h1>
     <?php
-    $dsn = "mysql:host=localhost;dbname=store;charset=utf8";
-    $pdo = new PDO($dsn, 'root', '');
+    require_once __DIR__ . '/db.php';
     $id = $_GET['id'] ?? 0;
     $item= $pdo->query("SELECT * FROM items WHERE id='$id'")->fetch(PDO::FETCH_ASSOC);
     if (!$item) {

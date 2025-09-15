@@ -36,8 +36,7 @@
     <h1>泰褲辣 早餐店 後臺系統</h1>
     <h2>餐點項目</h2>
     <?php
-    $dsn = "mysql:host=localhost;dbname=store;charset=utf8";
-    $pdo = new PDO($dsn, 'root', '');
+    require_once __DIR__ . '/db.php';
     // 查詢每個品項的銷售數量，並包含分類
     $sql = "SELECT i.id, i.name, i.price, IFNULL(SUM(s.quantity),0) AS total_sales, i.img, i.category
              FROM items i
