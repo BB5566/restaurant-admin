@@ -1,10 +1,9 @@
 <?php
 
-$dsn="mysql:host=localhost;dbname=store;charset=utf8";
-$pdo=new PDO($dsn, 'root', '');
+$requirePath = file_exists(__DIR__ . '/../db.php') ? __DIR__ . '/../db.php' : __DIR__ . '/db.php';
+require_once $requirePath;
 
-$sql="DELETE FROM `items` WHERE `id`='{$_GET['id']}'";
-$pdo->exec($sql);   
+$sql = "DELETE FROM `items` WHERE `id`='{$_GET['id']}'";
+$pdo->exec($sql);
 
 header("Location: ../index.php");
-
