@@ -6,3 +6,10 @@ node_modules/
 vendor/
 .idea/
 *.bak
+
+# SQLite 資料庫檔案（包含敏感資料）
+database/*.sqlite
+database/*.db
+
+# 但保留 schema 檔案
+!database/schema.sqlite.sql
