@@ -1,5 +1,14 @@
 .env
-uploads/
+uploads/*
+!uploads/.htaccess
+!uploads/683f9b6c1da36.png
+!uploads/683f9c8c182af.avif
+!uploads/683f9e351bb7a.avif
+!uploads/683f9fd15fae3.png
+!uploads/683fa004a3e62.png
+!uploads/683fa062991d0.png
+!uploads/683fa099b5bb2.jpg
+!uploads/683fa21e7b727.png
 *.log
 .DS_Store
 node_modules/
