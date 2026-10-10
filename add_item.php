@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/security.php';
+ensureSessionStarted();
+$csrfToken = getCsrfToken();
+?>
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -165,6 +170,7 @@
             </div>
 
             <form action="./api/add_item.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
                 <div class="form-group">
                     <label for="name">品項名稱</label>
                     <input type="text" name="name" id="name" placeholder="輸入品項名稱" required>

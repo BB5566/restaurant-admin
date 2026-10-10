@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/security.php';
+ensureSessionStarted();
+$csrfToken = getCsrfToken();
 
 // 驗證 ID - 使用 Prepared Statement
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -204,6 +207,7 @@ if (!$item) {
             </div>
 
             <form action="./api/update_item.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="id" value="<?= (int) $item['id'] ?>">
 
                 <div class="form-group">

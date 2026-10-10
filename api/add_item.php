@@ -4,6 +4,18 @@
  * 使用 Prepared Statements 防止 SQL 注入
  */
 
+require_once __DIR__ . '/../security.php';
+require_once __DIR__ . '/../upload_helper.php';
+ensureSessionStarted();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('錯誤：無效的請求方式');
+}
+
+if (!validateCsrfToken($_POST['csrf_token'] ?? null)) {
+    die('錯誤：CSRF 驗證失敗');
+}
+
 // 驗證必要欄位
 $required = ['name', 'category', 'price', 'cost', 'stock'];
 foreach ($required as $field) {
@@ -20,32 +32,11 @@ if (!is_numeric($_POST['price']) || !is_numeric($_POST['cost']) || !is_numeric($
 // 圖片上傳處理
 $imgName = '';
 if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
-    // 驗證檔案類型
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mimeType = finfo_file($finfo, $_FILES['img']['tmp_name']);
-    finfo_close($finfo);
-
-    if (!in_array($mimeType, $allowedTypes)) {
-        die('錯誤：不支援的圖片格式');
-    }
-
-    // 驗證副檔名
-    $ext = strtolower(pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION));
-    $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    if (!in_array($ext, $allowedExt)) {
-        die('錯誤：不支援的圖片副檔名');
-    }
-
-    $imgName = uniqid() . '.' . $ext;
     $uploadDir = __DIR__ . '/../uploads';
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
-    if (!move_uploaded_file($_FILES['img']['tmp_name'], $uploadDir . '/' . $imgName)) {
-        die('錯誤：圖片上傳失敗');
+    try {
+        $imgName = saveUploadedImage($_FILES['img'], $uploadDir);
+    } catch (RuntimeException $e) {
+        die($e->getMessage());
     }
 }
 

@@ -10,6 +10,17 @@
             box-sizing: border-box;
         }
 
+        .action-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .action-button {
+            border: none;
+            font: inherit;
+            cursor: pointer;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f8f9fa;
@@ -231,6 +242,9 @@
 
         <?php
         require_once __DIR__ . '/db.php';
+        require_once __DIR__ . '/security.php';
+        ensureSessionStarted();
+        $csrfToken = getCsrfToken();
 
         // 查詢每個品項的銷售數量，並包含分類
         $sql = "SELECT i.id, i.name, i.price, IFNULL(SUM(s.quantity),0) AS total_sales, i.img, i.category
@@ -280,9 +294,11 @@
                                 </td>
                                 <td>
                                     <a href="update_item.php?id=<?= (int) $item['id'] ?>" class="action-link edit-link">✏️ 編輯</a>
-                                    <a href="./api/delete_item.php?id=<?= (int) $item['id'] ?>"
-                                       class="action-link delete-link"
-                                       onclick="return confirm('確定要刪除「<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>」嗎？此操作無法復原。')">🗑️ 刪除</a>
+                                    <form action="./api/delete_item.php" method="post" class="action-form" onsubmit="return confirm('確定要刪除「<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>」嗎？此操作無法復原。')">
+                                        <input type="hidden" name="id" value="<?= (int) $item['id'] ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                                        <button type="submit" class="action-link delete-link action-button">🗑️ 刪除</button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
