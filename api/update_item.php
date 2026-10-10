@@ -33,7 +33,7 @@ $requirePath = file_exists(__DIR__ . '/../db.php') ? __DIR__ . '/../db.php' : __
 require_once $requirePath;
 
 // 處理圖片上傳
-$img = $_POST['old_img'] ?? '';
+$img = basename($_POST['old_img'] ?? ''); // 只取檔名，避免 ../ 刪到 uploads 以外的檔案
 if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
     $uploadDir = __DIR__ . '/../uploads';
     try {
