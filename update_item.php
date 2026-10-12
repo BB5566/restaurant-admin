@@ -29,194 +29,410 @@ if (!$item) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>編輯品項 - 泰褲辣早餐店</title>
     <style>
-        * {
+        :root {
+            /* Colors */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-active: #3730a3;
+            --primary-light: #eef2ff;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --primary-gradient-hover: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+
+            --danger: #b91c1c;
+            --danger-bg: #fef2f2;
+            --danger-border: #fecaca;
+
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-inverse: #ffffff;
+
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-subtle: #f1f5f9;
+
+            --border-color: #cbd5e1;
+            --border-focus: #4f46e5;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+
+            /* Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+            /* Focus & Transitions */
+            --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.35);
+            --transition-fast: 150ms ease;
+            --transition-normal: 200ms ease;
+        }
+
+        *, *::before, *::after {
             box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-secondary);
+            line-height: 1.5;
             margin: 0;
-            padding: 20px;
+            padding: var(--space-md);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 540px;
+            width: 100%;
             margin: 0 auto;
         }
 
         .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            padding: var(--space-xl);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: var(--space-lg);
+            position: relative;
         }
 
-        h1 {
-            color: #2c3e50;
-            margin: 0 0 8px 0;
-            font-size: 1.5rem;
+        .back-nav {
+            margin-bottom: var(--space-md);
+            text-align: left;
         }
 
         .back-link {
-            color: #667eea;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 44px;
+            color: var(--primary);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            margin-left: -8px;
+            transition: color var(--transition-fast), background var(--transition-fast);
         }
 
         .back-link:hover {
-            text-decoration: underline;
+            color: var(--primary-hover);
+            background: var(--primary-light);
+            text-decoration: none;
+        }
+
+        .back-link:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        h1 {
+            color: var(--text-primary);
+            margin: 0 0 6px 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .header-desc {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 0.95rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-md);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
         }
 
         label {
             display: block;
             margin-bottom: 6px;
-            font-weight: 500;
-            color: #555;
-            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.925rem;
+        }
+
+        .required-star {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .optional-hint {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
 
         input[type="text"],
         input[type="number"],
         select {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #e1e5eb;
-            border-radius: 8px;
+            min-height: 46px;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
             font-size: 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            color: var(--text-primary);
+            background-color: var(--bg-card);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder {
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #94a3b8;
         }
 
         input:focus,
         select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--border-focus);
+            box-shadow: var(--focus-ring);
         }
 
         input[type="file"] {
             width: 100%;
-            padding: 10px;
-            border: 2px dashed #e1e5eb;
-            border-radius: 8px;
+            min-height: 46px;
+            padding: 10px 14px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-subtle);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: border-color var(--transition-fast), background var(--transition-fast);
         }
 
         input[type="file"]:hover {
-            border-color: #667eea;
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        input[type="file"]:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+            border-color: var(--primary);
+        }
+
+        .field-hint {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .image-preview-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .current-image {
-            margin-top: 10px;
             text-align: center;
+            padding: 14px;
+            background: var(--bg-subtle);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            transition: opacity var(--transition-normal);
         }
 
         .current-image img {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 8px;
-            border: 2px solid #e1e5eb;
+            max-width: 140px;
+            max-height: 140px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: block;
+            margin: 0 auto;
         }
 
         .current-image p {
             font-size: 0.85rem;
-            color: #666;
+            color: var(--text-muted);
             margin: 8px 0 0 0;
+            font-weight: 500;
+        }
+
+        .preview-area {
+            text-align: center;
+            padding: 14px;
+            background: var(--primary-light);
+            border-radius: var(--radius-md);
+            border: 1.5px dashed var(--primary);
+        }
+
+        .preview-title {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .preview-area img {
+            max-width: 140px;
+            max-height: 140px;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            box-shadow: var(--shadow-sm);
+            display: none;
+            margin: 0 auto;
         }
 
         .btn-group {
             display: flex;
             gap: 12px;
-            margin-top: 28px;
+            margin-top: var(--space-xl);
         }
 
         .btn {
             flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
+            min-height: 48px;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--primary-gradient);
+            color: var(--text-inverse);
+            border: none;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .btn-secondary {
-            background: #f1f3f4;
-            color: #5f6368;
-            text-decoration: none;
-            text-align: center;
-            line-height: 1.2;
+            background: var(--bg-subtle);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background: #e8eaed;
+            background: #e2e8f0;
+            border-color: #94a3b8;
         }
 
-        .preview-area {
-            margin-top: 10px;
+        .site-footer {
             text-align: center;
-        }
-
-        .preview-area img {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 8px;
-            display: none;
+            padding: var(--space-md) 0 0;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
             .card {
-                padding: 20px;
+                padding: var(--space-lg) var(--space-md);
+                border-radius: var(--radius-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
             }
 
             .btn-group {
-                flex-direction: column;
+                flex-direction: column-reverse;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="header">
+        <main class="card">
+            <header class="header">
+                <nav class="back-nav" aria-label="導覽">
+                    <a href="index.php" class="back-link"><span aria-hidden="true">←</span> 返回列表</a>
+                </nav>
                 <h1>✏️ 編輯品項</h1>
-                <a href="index.php" class="back-link">← 返回列表</a>
-            </div>
+                <p class="header-desc">修改「<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>」的餐點資料</p>
+            </header>
 
             <form action="./api/update_item.php" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="id" value="<?= (int) $item['id'] ?>">
 
                 <div class="form-group">
-                    <label for="name">品項名稱</label>
-                    <input type="text" name="name" id="name" value="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>" required>
+                    <label for="name">品項名稱 <span class="required-star" aria-hidden="true">*</span></label>
+                    <input type="text" name="name" id="name" value="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>" required autocomplete="off">
                 </div>
 
                 <div class="form-group">
-                    <label for="category">分類</label>
+                    <label for="category">分類 <span class="required-star" aria-hidden="true">*</span></label>
                     <select name="category" id="category" required>
                         <option value="飲品" <?= ($item['category'] === '飲品') ? 'selected' : '' ?>>🥤 飲品</option>
                         <option value="吐司" <?= ($item['category'] === '吐司') ? 'selected' : '' ?>>🍞 吐司</option>
@@ -225,35 +441,41 @@ if (!$item) {
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label for="price">售價 (NT$)</label>
-                    <input type="number" name="price" id="price" min="0" step="1" value="<?= (int) $item['price'] ?>" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">售價 (NT$) <span class="required-star" aria-hidden="true">*</span></label>
+                        <input type="number" name="price" id="price" min="0" step="1" value="<?= (int) $item['price'] ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cost">成本 (NT$) <span class="required-star" aria-hidden="true">*</span></label>
+                        <input type="number" name="cost" id="cost" min="0" step="0.1" value="<?= (float) $item['cost'] ?>" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="cost">成本 (NT$)</label>
-                    <input type="number" name="cost" id="cost" min="0" step="0.1" value="<?= (float) $item['cost'] ?>" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="stock">庫存數量</label>
+                    <label for="stock">庫存數量 <span class="required-star" aria-hidden="true">*</span></label>
                     <input type="number" name="stock" id="stock" min="0" step="1" value="<?= (int) $item['stock'] ?>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="img">更換圖片</label>
-                    <input type="file" name="img" id="img" accept="image/jpeg,image/png,image/gif,image/webp" onchange="previewImage(this)">
+                    <label for="img">更換圖片 <span class="optional-hint">（選填）</span></label>
+                    <input type="file" name="img" id="img" accept="image/jpeg,image/png,image/gif,image/webp" aria-describedby="img-hint" onchange="previewImage(this)">
                     <input type="hidden" name="old_img" value="<?= htmlspecialchars($item['img'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <small class="field-hint" id="img-hint">若不需更換圖片，請保留此欄位空白即可</small>
 
-                    <?php if (!empty($item['img'])): ?>
-                        <div class="current-image">
-                            <img src="uploads/<?= htmlspecialchars($item['img'], ENT_QUOTES, 'UTF-8') ?>" alt="現有圖片">
-                            <p>目前圖片</p>
+                    <div class="image-preview-group">
+                        <?php if (!empty($item['img'])): ?>
+                            <div class="current-image" id="currentImageWrapper">
+                                <img src="uploads/<?= htmlspecialchars($item['img'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?> 目前商品圖片">
+                                <p>目前使用中的圖片</p>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="preview-area" id="previewContainer" style="display: none;">
+                            <p class="preview-title">即將更換的新圖片預覽：</p>
+                            <img id="preview" alt="新圖片預覽">
                         </div>
-                    <?php endif; ?>
-
-                    <div class="preview-area">
-                        <img id="preview" alt="新圖片預覽">
                     </div>
                 </div>
 
@@ -262,25 +484,41 @@ if (!$item) {
                     <button type="submit" class="btn btn-primary">儲存變更</button>
                 </div>
             </form>
-        </div>
+        </main>
+
+        <footer class="site-footer">
+            <p>泰褲辣 早餐店 後臺管理系統 &copy; <?= date('Y') ?></p>
+        </footer>
     </div>
 
     <script>
         function previewImage(input) {
             const preview = document.getElementById('preview');
-            const currentImage = document.querySelector('.current-image');
+            const previewContainer = document.getElementById('previewContainer');
+            const currentImage = document.getElementById('currentImageWrapper');
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (file.type && !file.type.startsWith('image/')) {
+                    alert('請選擇有效的圖片檔案！');
+                    input.value = '';
+                    preview.style.display = 'none';
+                    if (previewContainer) previewContainer.style.display = 'none';
+                    if (currentImage) currentImage.style.opacity = '1';
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
+                    if (previewContainer) previewContainer.style.display = 'block';
                     if (currentImage) {
-                        currentImage.style.opacity = '0.5';
+                        currentImage.style.opacity = '0.45';
                     }
-                }
-                reader.readAsDataURL(input.files[0]);
+                };
+                reader.readAsDataURL(file);
             } else {
                 preview.style.display = 'none';
+                if (previewContainer) previewContainer.style.display = 'none';
                 if (currentImage) {
                     currentImage.style.opacity = '1';
                 }
